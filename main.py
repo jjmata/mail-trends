@@ -9,6 +9,7 @@ import logging
 import messageinfo
 import re
 import sys
+import time
 
 from Cheetah.Template import Template
 import jwzthreading
@@ -285,28 +286,30 @@ logging.info("Initializing")
 
 opts = GetOptsMap()
 
-message_infos = GetMessageInfos(opts)
+while True:
+  message_infos = GetMessageInfos(opts)
 
-logging.info("Extracting threads")
-threads = ExtractThreads(message_infos)
+  logging.info("Extracting threads")
+  threads = ExtractThreads(message_infos)
 
-stats = InitStats(messageinfo.MessageInfo.GetDateRange())
+  stats = InitStats(messageinfo.MessageInfo.GetDateRange())
 
-logging.info("Generating stats")
-for stat in stats:
-  stat.ProcessMessageInfos(message_infos, threads)
+  logging.info("Generating stats")
+  for stat in stats:
+    stat.ProcessMessageInfos(message_infos, threads)
 
-logging.info("Outputting HTML")
+  logging.info("Outputting HTML")
 
-t = Template(
-    file="templates/index.tmpl",
-    searchList = {
-      "stats": stats,
-      "host": re.sub("^.*@", "", opts.get("username",''))
-    }
-)
-out = codecs.open("out/index.html", mode="w", encoding='utf-8')
-out.write(unicode(t))
-out.close()
+  t = Template(
+      file="templates/index.tmpl",
+      searchList = {
+        "stats": stats,
+        "host": re.sub("^.*@", "", opts.get("username",''))
+      }
+  )
+  out = codecs.open("out/index.html", mode="w", encoding='utf-8')
+  out.write(unicode(t))
+  out.close()
 
-logging.info("Done")
+  logging.info("Done")
+  time.sleep(86400)
