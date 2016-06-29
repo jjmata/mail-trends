@@ -24,6 +24,7 @@ modified by Joao Paulo Barraca <jpbarraca@ua.pt>
 Example usage:
 
 ./main.py --server=mail.domain.com --username=guest --password=1234 --use_ssl
+python main.py --server=mail.pynsa.es --username=prueba@pynsa.es --me=prueba@pynsa.es
 
 or reading a local Maildir folder
 
